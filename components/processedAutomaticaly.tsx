@@ -36,7 +36,7 @@ const ProcessedAutomatically: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-base sm:text-lg md:text-[2.125rem] text-[#D3C5F6] font-normal tracking-tight"
+            className="text-3xl sm:text-lg md:text-[2.125rem] text-[#D3C5F6] font-normal tracking-tight"
           >
             Every Document
           </motion.p>
@@ -66,17 +66,73 @@ const ProcessedAutomatically: React.FC = () => {
           </motion.p>
         </div>
 
-        {/* Feature Grid */}
+        {/* Mobile Marquee (Single Row) */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.7, delay: 0.25 }}
-          className="w-full grid grid-cols-2 md:grid-cols-4 bg-black/40 backdrop-blur-sm"
+          className="w-full md:hidden flex relative overflow-hidden py-2"
+        >
+          {/* Side Gradients for clean marquee fade */}
+          <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-black via-black/80 to-transparent z-20 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black via-black/80 to-transparent z-20 pointer-events-none" />
+
+          <div className="flex overflow-hidden border-y border-zinc-800/80">
+            <motion.div
+              className="flex shrink-0"
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{
+                ease: "linear",
+                duration: 25,
+                repeat: Infinity,
+              }}
+            >
+              {[
+                ...features,
+                ...features,
+                ...features,
+                ...features,
+              ].map((item, index) => (
+                <div
+                  key={`marquee-${item.id}-${index}`}
+                  className="group relative flex flex-col items-center justify-center px-8 py-6 min-w-[200px] gap-2 shrink-0 text-center border-r border-zinc-800/80"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  {item.isCenterOrb ? (
+                    <div className="relative flex items-center justify-center w-20 h-20">
+                      <Image
+                        src="/ai_image.png"
+                        alt="AI"
+                        fill
+                        className="object-cover select-none"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center z-10">
+                      <span className="text-xl text-zinc-400 font-light tracking-tight leading-none mb-1.5">
+                        {item.category}
+                      </span>
+                      <span className="text-3xl font-normal tracking-tight text-white leading-tight">
+                        {item.title}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Desktop Feature Grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.7, delay: 0.25 }}
+          className="hidden md:grid w-full grid-cols-4 bg-black/40 backdrop-blur-sm"
         >
           {features.map((item, index) => {
-            const isMobileRightBorder = index % 2 === 0;
-            const isMobileBottomBorder = index < 6;
             const isDesktopRightBorder = index % 4 !== 3;
             const isDesktopBottomBorder = index < 4;
 
@@ -84,9 +140,7 @@ const ProcessedAutomatically: React.FC = () => {
               <div
                 key={item.id}
                 className={`group relative flex flex-col items-center justify-center p-8 sm:p-10 min-h-[160px] sm:min-h-[190px] text-center transition-all duration-300 hover:bg-zinc-900/40 border-zinc-800/80 ${
-                  isMobileRightBorder ? "border-r" : "border-r-0"
-                } ${isDesktopRightBorder ? "md:border-r" : "md:border-r-0"} ${
-                  isMobileBottomBorder ? "border-b" : "border-b-0"
+                  isDesktopRightBorder ? "md:border-r" : "md:border-r-0"
                 } ${isDesktopBottomBorder ? "md:border-b" : "md:border-b-0"}`}
               >
                 {/* Subtle card hover glow */}

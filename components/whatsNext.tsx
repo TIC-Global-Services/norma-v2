@@ -53,7 +53,7 @@ const WhatsNext: React.FC = () => {
         </motion.h2>
 
         {/* Scroll Reveal Editorial Paragraph */}
-        <p className="text-xl sm:text-xl md:text-[22px] lg:text-[22px] font-normal leading-[1.4] tracking-tight">
+        <p className="text-sm sm:text-xl md:text-[22px] lg:text-[22px] text-right font-normal leading-[1.2] md:leading-[1.4] tracking-tight">
           {words.map((word, i) => {
             const start = i / words.length;
             const end = start + 1 / words.length;
@@ -71,13 +71,13 @@ const WhatsNext: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="mt-16 sm:mt-24 flex flex-col gap-1.5"
+          className="mt-16 sm:mt-24 flex flex-col md:gap-1.5"
         >
           <p className="text-xl sm:text-2xl lg:text-[34px] font-light text-[#AAAAAA] tracking-tight">
             Not built for a few.
           </p>
           <h3 className="text-3xl sm:text-5xl lg:text-[60px] font-normal tracking-tight text-[#AAAAAA] leading-tight">
-            Built for healthcare everywhere.
+            Built for <br className="md:hidden"/> healthcare everywhere.
           </h3>
         </motion.div>
       </div>

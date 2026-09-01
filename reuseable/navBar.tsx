@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Hamburger, HamburgerIcon, Menu } from "lucide-react";
 
 interface NavBarProps {
   className?: string;
@@ -58,7 +59,7 @@ const NavBar: React.FC<NavBarProps> = ({ className = "" }) => {
         {/* Center Logo */}
         <Link
           href="/"
-          className="relative w-[160px] h-[40px] sm:w-[280px] sm:h-[45px] justify-self-center"
+          className="relative w-[240px] h-[40px] sm:w-[280px] sm:h-[45px] justify-self-center"
         >
           <Image
             src="/norma-ai_logo.png"
@@ -82,7 +83,7 @@ const NavBar: React.FC<NavBarProps> = ({ className = "" }) => {
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
-            className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 backdrop-blur-md flex items-center justify-center transition-all duration-200 text-white cursor-pointer active:scale-95 shadow-sm"
+            className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 backdrop-blur-md hidden md:flex items-center justify-center transition-all duration-200 text-white cursor-pointer active:scale-95 shadow-sm"
           >
             <Image
               src="/specs_export.png"
@@ -91,6 +92,14 @@ const NavBar: React.FC<NavBarProps> = ({ className = "" }) => {
               height={18}
               className="object-contain select-none"
             />
+          </button>
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+            className="md:hidden"
+          >
+            <Menu size={20} color="#fff" />
           </button>
         </div>
       </div>

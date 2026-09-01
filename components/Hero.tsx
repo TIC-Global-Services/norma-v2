@@ -28,8 +28,8 @@ const Hero: React.FC = () => {
       <div className="relative z-10  w-full px-6 md:md:px-[3%] pt-32 pb-12 sm:pb-16 md:pb-20 mt-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 lg:gap-12">
           {/* Left Column: Headline, Tagline, & Description */}
-          <div className="max-w-2xl">
-            <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-normal tracking-tight text-white leading-none lg:leading-[1.12]">
+          <div className="max-w-2xl ">
+            <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-normal text-center md:text-left tracking-tight text-white leading-none lg:leading-[1.12]">
               Superconnected <br />
               <span className="text-white">Workflow With </span>
               <span className="text-[#c4b5fd] font-medium drop-shadow-[0_0_25px_rgba(196,181,253,0.35)]">
@@ -37,11 +37,11 @@ const Hero: React.FC = () => {
               </span>
             </h1>
 
-            <p className="mt-4 sm:mt-5 text-lg sm:text-xl font-normal text-zinc-100 tracking-tight leading-[1.2] md:leading-none">
-              Better Connections Lead To Better Outcomes
+            <p className="mt-4 sm:mt-5 text-xl sm:text-xl font-normal text-center md:text-left text-zinc-100 tracking-tight leading-[1.2] md:leading-none">
+              Better Connections <br className="md:hidden"/> Lead To Better Outcomes
             </p>
 
-            <p className="mt-5 sm:mt-6 text-sm sm:text-lg text-white font-light leading-[1.2] lg:leading-relaxed max-w-xl">
+            <p className="mt-5 sm:mt-6 text-base sm:text-lg text-white font-light leading-[1.2] lg:leading-relaxed md:max-w-xl  text-center md:text-left">
               Norma doesn&apos;t just assist healthcare—she connects it. Every patient,
               every conversation, every detail, remembered. One platform. Four
               specialized agents. Start with what you need today and scale as you
@@ -50,7 +50,7 @@ const Hero: React.FC = () => {
           </div>
 
           {/* Right Column: CTA Button */}
-          <div className="md:self-end flex-shrink-0 pt-4 md:pt-0">
+          <div className="self-center md:self-end flex-shrink-0 pt-0 md:pt-0">
             <button
               type="button"
               className="group relative inline-flex items-center gap-3.5 px-6 py-3.5 rounded-full bg-black/60 hover:bg-black/80 border border-white/20 hover:border-purple-400/40 backdrop-blur-xl text-white text-sm sm:text-[15px] font-normal tracking-wide transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-2xl hover:shadow-purple-950/40 cursor-pointer"

@@ -100,7 +100,7 @@ const GulfClinic: React.FC = () => {
                 </div>
 
                 {/* Norma Column */}
-                <div className="col-span-3 sm:col-span-3 p-4 sm:p-5 flex items-center justify-center border-l border-zinc-800/90 bg-[#B9B9B9]/5">
+                <div className="col-span-3 sm:col-span-3 p-6 h-full sm:p-5 flex items-center justify-center border-l border-zinc-800/90 bg-[#B9B9B9]/5">
                   {row.norma === true ? (
                     <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#FFFFFF] flex items-center justify-center shadow-sm">
                       <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2DB06A] stroke-[3]" />

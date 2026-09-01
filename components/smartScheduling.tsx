@@ -143,11 +143,11 @@ const NormaEcoSystem: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl sm:text-4xl lg:text-[46px] font-normal tracking-tight text-[#d8b4fe] leading-[1.18]">
+            <h2 className="text-3xl sm:text-4xl lg:text-[46px] font-normal md:text-left text-center tracking-tight text-[#d8b4fe] leading-[1.18]">
               Smarter Scheduling From Start to Finish
             </h2>
 
-            <p className="mt-6 sm:mt-8 text-sm sm:text-base lg:text-[22px] text-zinc-300 font-light leading-[1.2] tracking-tight">
+            <p className="mt-6 sm:mt-8 text-sm sm:text-base lg:text-[22px] md:text-left text-center text-zinc-300 font-light leading-[1.2] tracking-tight">
               When a patient books an appointment via WhatsApp, voice note, or call,
               Norma instantly confirms it and notifies the right people—keeping
               your entire clinic aligned from the very start.
@@ -283,7 +283,7 @@ const NormaEcoSystem: React.FC = () => {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.1, duration: 0.4 }}
-                          className="text-lg sm:text-xl md:text-3xl font-normal text-[#d8b4fe] tracking-tight leading-snug"
+                          className="text-[22px] sm:text-xl md:text-3xl font-normal text-[#d8b4fe] tracking-tight leading-snug"
                         >
                           {card.title}
                         </motion.h3>
@@ -291,7 +291,7 @@ const NormaEcoSystem: React.FC = () => {
                           initial={{ opacity: 0, y: 8 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.2, duration: 0.4 }}
-                          className="mt-2 text-xs sm:text-base text-white font-light leading-[1.2] line-clamp-3"
+                          className="mt-2 text-sm sm:text-base text-white font-light leading-[1.2] line-clamp-3"
                         >
                           {card.description}
                         </motion.p>

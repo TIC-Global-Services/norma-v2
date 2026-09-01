@@ -39,7 +39,7 @@ const UpdateAfterBooking: React.FC = () => {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="text-3xl sm:text-4xl md:text-5xl lg:text-[50px] font-normal tracking-tight text-[#E8DEF8] mb-10 md:mb-14"
         >
-          Who Gets Updated After Booking
+          Who Gets <br className="md:hidden"/> Updated After Booking
         </motion.h2>
 
         {/* Mobile Phone Mockup with scroll-driven entrance */}
@@ -73,7 +73,7 @@ const UpdateAfterBooking: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-          className="text-sm sm:text-base md:text-[22px] leading-[1.3] max-w-4xl font-light text-zinc-300 px-4"
+          className="text-sm sm:text-base md:text-[22px] leading-[1.3] md:max-w-4xl font-light text-zinc-300 md:px-4"
         >
           <span className="text-white font-normal">Patient</span>{" "}
           <span className="text-zinc-500">–</span>{" "}

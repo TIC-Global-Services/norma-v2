@@ -54,7 +54,7 @@ const WhoBuiltIt: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-sm sm:text-base md:text-[22px] text-white font-light leading-[1.3] max-w-5xl mx-auto"
+            className="text-sm sm:text-base md:text-[22px] text-white font-light leading-[1.3] md:max-w-5xl mx-auto"
           >
             Three people. Three very different paths. One shared belief — that
             the way healthcare communicates in the Gulf was broken, that the
@@ -93,7 +93,7 @@ const WhoBuiltIt: React.FC = () => {
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, ease: "easeOut" }}
-                      className="mt-auto"
+                      className="md:mt-auto"
                     >
                       <h3 className="text-2xl sm:text-3xl md:text-[2.5rem] font-normal tracking-tight text-white mb-4">
                         {person.name}

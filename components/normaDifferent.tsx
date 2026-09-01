@@ -220,7 +220,7 @@ const NormaDifferent: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="text-lg sm:text-3xl text-[#C4B5FD] font-light leading-none"
+              className="text-3xl sm:text-3xl text-[#C4B5FD] font-light leading-none"
             >
               {centerHeader.subhead}
             </motion.p>
@@ -259,7 +259,7 @@ const NormaDifferent: React.FC = () => {
                   transition={{ duration: 0.5 }}
                   className="hidden lg:flex flex-col items-center justify-center text-center py-2"
                 >
-                  <p className="text-xl lg:text-[22px] text-[#C4B5FD] font-light leading-none">
+                  <p className="text-3xl lg:text-[22px] text-[#C4B5FD] font-light leading-none">
                     {column.header.subhead}
                   </p>
                   <h2 className="text-3xl lg:text-[44px] font-normal text-[#C4B5FD] tracking-tight leading-tight mt-1.5">
@@ -298,10 +298,10 @@ const NormaDifferent: React.FC = () => {
                       </div>
 
                       <div className="relative z-[2]">
-                        <h3 className="text-xl sm:text-2xl lg:text-[2.125rem] font-normal text-white tracking-tight mb-2">
+                        <h3 className="text-[22px] sm:text-2xl lg:text-[2.125rem] font-normal text-white tracking-tight mb-2">
                           {card.title}
                         </h3>
-                        <p className="text-xs sm:text-lg text-zinc-400 font-light leading-[1.3] max-w-sm mx-auto">
+                        <p className="text-base sm:text-lg text-zinc-400 font-light leading-[1.3] max-w-sm mx-auto">
                           {card.description}
                         </p>
                       </div>
@@ -316,17 +316,17 @@ const NormaDifferent: React.FC = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay }}
-                    className={`bento-glow-card group relative rounded-[14px] bg-[#242427] border border-white/[0.07] p-6 sm:p-7 lg:p-8 flex flex-col justify-between flex-1 min-h-[300px] sm:min-h-[330px] overflow-hidden transition-all duration-300 ${
+                    className={`bento-glow-card group relative rounded-[14px] bg-[#242427] border border-white/[0.07] p-6 sm:p-7 lg:p-8 flex flex-col items-center md:items-start md:justify-between flex-1 min-h-[300px] sm:min-h-[330px] overflow-hidden transition-all duration-300 ${
                       card.flexClass || ""
                     }`}
                   >
                     <div className="relative z-[2]">
                       {card.subhead && (
-                        <span className="text-sm sm:text-xl text-zinc-300 font-light block leading-none">
+                        <span className="text-[22px] sm:text-xl text-center md:text-left text-zinc-300 font-light block leading-none">
                           {card.subhead}
                         </span>
                       )}
-                      <h3 className="text-2xl sm:text-3xl lg:text-[40px] font-normal text-white tracking-tight leading-none">
+                      <h3 className="text-[22px] sm:text-3xl lg:text-[40px] font-normal text-white tracking-tight leading-none">
                         {card.title}
                       </h3>
                     </div>
@@ -344,7 +344,7 @@ const NormaDifferent: React.FC = () => {
                       />
                     </div>
 
-                    <p className="relative z-[2] text-xs sm:text-lg text-zinc-400 font-light leading-[1.3] max-w-sm">
+                    <p className="relative z-[2] text-base text-center text-base sm:text-lg text-zinc-400 font-light leading-[1.3] max-w-sm">
                       {card.description}
                     </p>
                   </motion.div>

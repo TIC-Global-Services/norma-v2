@@ -83,7 +83,7 @@ const NormaEcoSystem: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-3xl sm:text-4xl md:text-5xl lg:text-[50px] font-normal tracking-tight text-[#D3C5F6] text-center mb-10 sm:mb-14 md:mb-20"
         >
-          Explore the Norma Ecosystem
+          Explore <br className="md:hidden"/> the Norma Ecosystem
         </motion.h2>
 
         {/* ========================================================================= */}
@@ -164,10 +164,10 @@ const NormaEcoSystem: React.FC = () => {
                   pauseAutoScroll();
                 }}
                 aria-label={`Slide to ${card.title}`}
-                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                className={`h-1 rounded-full transition-all duration-300 cursor-pointer ${
                   activeIndex === idx
-                    ? "w-7 bg-[#C4B5FD]"
-                    : "w-2 bg-zinc-700 hover:bg-zinc-500"
+                    ? "w-20 bg-[#C4B5FD]"
+                    : "w-8 bg-zinc-700 hover:bg-zinc-500"
                 }`}
               />
             ))}
