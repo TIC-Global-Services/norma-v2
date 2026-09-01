@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -123,12 +124,13 @@ const NormaEcoSystem: React.FC = () => {
                 {/* Center Media: Video */}
                 <div className="flex items-center justify-center my-auto w-full pointer-events-none">
                   <div className="relative w-36 h-36 flex items-center justify-center">
-                    <video
-                      src="/ai-animation.mp4"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
+                    <Image
+                      src="/ai-gif.gif"
+                      alt="Norma AI Animation"
+                      width={160}
+                      height={160}
+                      unoptimized
+                      priority
                       className="w-full h-full object-contain pointer-events-none mix-blend-multiply"
                     />
                   </div>
@@ -217,15 +219,16 @@ const NormaEcoSystem: React.FC = () => {
                         initial={{ opacity: 0, scale: 0.85 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.85 }}
-                        transition={{ duration: 0.35, ease: "easeOut" }}
+                        transition={{ duration: 0.80, ease: "easeOut" }}
                         className="relative w-36 h-36 sm:w-40 sm:h-40 flex items-center justify-center"
                       >
-                        <video
-                          src="/ai-animation.mp4"
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
+                        <Image
+                          src="/ai-gif.gif"
+                          alt="Norma AI Animation"
+                          width={160}
+                          height={160}
+                          unoptimized
+                          priority
                           className="w-full h-full object-contain pointer-events-none mix-blend-multiply"
                         />
                       </motion.div>

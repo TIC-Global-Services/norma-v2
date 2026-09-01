@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
@@ -111,12 +111,107 @@ const columnsData: ColumnData[] = [
   },
 ];
 
+const GLOW_COLOR = "211, 197, 246"; // #D3C5F6
+
 const NormaDifferent: React.FC = () => {
   const centerHeader = columnsData.find((col) => col.header)?.header;
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  // Smooth spotlight & border-glow calculation across all bento cards without any card moving
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!gridRef.current) return;
+    const cards = gridRef.current.querySelectorAll<HTMLElement>(".bento-glow-card");
+    const radius = 320;
+    const proximity = radius * 0.35;
+    const fadeDistance = radius * 0.85;
+
+    cards.forEach((card) => {
+      const rect = card.getBoundingClientRect();
+      const relativeX = ((e.clientX - rect.left) / rect.width) * 100;
+      const relativeY = ((e.clientY - rect.top) / rect.height) * 100;
+
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const distance =
+        Math.hypot(e.clientX - centerX, e.clientY - centerY) -
+        Math.max(rect.width, rect.height) / 2;
+      const effectiveDistance = Math.max(0, distance);
+
+      let intensity = 0;
+      if (effectiveDistance <= proximity) {
+        intensity = 1;
+      } else if (effectiveDistance <= fadeDistance) {
+        intensity = (fadeDistance - effectiveDistance) / (fadeDistance - proximity);
+      }
+
+      card.style.setProperty("--glow-x", `${relativeX}%`);
+      card.style.setProperty("--glow-y", `${relativeY}%`);
+      card.style.setProperty("--glow-intensity", intensity.toFixed(3));
+    });
+  };
+
+  const handlePointerLeave = () => {
+    if (!gridRef.current) return;
+    const cards = gridRef.current.querySelectorAll<HTMLElement>(".bento-glow-card");
+    cards.forEach((card) => {
+      card.style.setProperty("--glow-intensity", "0");
+    });
+  };
 
   return (
     <section className="relative w-full bg-black text-white px-4 sm:px-6 lg:px-[3%] py-16 lg:py-24 overflow-hidden border-b border-[#262626]">
-      <div className="">
+      {/* Inline styles for Bento Card Glow & Border Effects */}
+      <style>{`
+        .bento-glow-card {
+          --glow-x: 50%;
+          --glow-y: 50%;
+          --glow-intensity: 0;
+          --glow-radius: 320px;
+          --glow-color: ${GLOW_COLOR};
+        }
+
+        /* Inner subtle radial spotlight */
+        .bento-glow-card::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          background: radial-gradient(
+            var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+            rgba(var(--glow-color), calc(var(--glow-intensity) * 0.15)) 0%,
+            rgba(var(--glow-color), calc(var(--glow-intensity) * 0.05)) 35%,
+            transparent 65%
+          );
+          pointer-events: none;
+          z-index: 1;
+          transition: opacity 0.2s ease;
+        }
+
+        /* Luminous spotlight border */
+        .bento-glow-card::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          padding: 1.5px;
+          border-radius: inherit;
+          background: radial-gradient(
+            var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+            rgba(var(--glow-color), calc(var(--glow-intensity) * 0.9)) 0%,
+            rgba(var(--glow-color), calc(var(--glow-intensity) * 0.45)) 25%,
+            rgba(var(--glow-color), calc(var(--glow-intensity) * 0.12)) 45%,
+            transparent 65%
+          );
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          mask-composite: exclude;
+          pointer-events: none;
+          z-index: 10;
+          transition: opacity 0.2s ease;
+        }
+      `}</style>
+
+      <div>
         {/* Mobile / Tablet Header (hidden on desktop where header sits in center column) */}
         {centerHeader && (
           <div className="block lg:hidden text-center mb-10">
@@ -141,8 +236,13 @@ const NormaDifferent: React.FC = () => {
           </div>
         )}
 
-        {/* 3-Column Bento Grid rendered from Array of Objects */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 items-stretch">
+        {/* 3-Column Bento Grid with Cursor-Responsive Glow */}
+        <div
+          ref={gridRef}
+          onPointerMove={handlePointerMove}
+          onPointerLeave={handlePointerLeave}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-4 items-stretch"
+        >
           {columnsData.map((column, colIndex) => (
             <div
               key={column.id}
@@ -180,12 +280,12 @@ const NormaDifferent: React.FC = () => {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay }}
-                      className={`group relative rounded-[14px] bg-[#242427] border border-white/[0.07] hover:border-purple-400/30 p-6 sm:p-7 lg:p-8 flex flex-col items-center text-center justify-center transition-all duration-300 hover:shadow-xl hover:shadow-purple-950/20 ${
+                      className={`bento-glow-card group relative rounded-[14px] bg-[#242427] border border-white/[0.07] p-6 sm:p-7 lg:p-8 flex flex-col items-center text-center justify-center overflow-hidden transition-all duration-300 ${
                         card.flexClass || "flex-1 min-h-[300px]"
                       }`}
                     >
                       <div
-                        className={`relative ${
+                        className={`relative z-[2] ${
                           card.imageClassName || "w-20 h-20"
                         } mx-auto mb-4 flex items-center justify-center transition-transform duration-300 group-hover:scale-105`}
                       >
@@ -197,7 +297,7 @@ const NormaDifferent: React.FC = () => {
                         />
                       </div>
 
-                      <div>
+                      <div className="relative z-[2]">
                         <h3 className="text-xl sm:text-2xl lg:text-[2.125rem] font-normal text-white tracking-tight mb-2">
                           {card.title}
                         </h3>
@@ -216,11 +316,11 @@ const NormaDifferent: React.FC = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay }}
-                    className={`group relative rounded-[14px] bg-[#242427] border border-white/[0.07] hover:border-purple-400/30 p-6 sm:p-7 lg:p-8 flex flex-col justify-between flex-1 min-h-[300px] sm:min-h-[330px] transition-all duration-300 hover:shadow-xl hover:shadow-purple-950/20 ${
+                    className={`bento-glow-card group relative rounded-[14px] bg-[#242427] border border-white/[0.07] p-6 sm:p-7 lg:p-8 flex flex-col justify-between flex-1 min-h-[300px] sm:min-h-[330px] overflow-hidden transition-all duration-300 ${
                       card.flexClass || ""
                     }`}
                   >
-                    <div>
+                    <div className="relative z-[2]">
                       {card.subhead && (
                         <span className="text-sm sm:text-xl text-zinc-300 font-light block leading-none">
                           {card.subhead}
@@ -232,7 +332,7 @@ const NormaDifferent: React.FC = () => {
                     </div>
 
                     <div
-                      className={`relative ${
+                      className={`relative z-[2] ${
                         card.imageClassName || "w-28 h-28"
                       } mx-auto my-3 flex items-center justify-center transition-transform duration-300 group-hover:scale-105`}
                     >
@@ -244,7 +344,7 @@ const NormaDifferent: React.FC = () => {
                       />
                     </div>
 
-                    <p className="text-xs sm:text-lg text-zinc-400 font-light leading-[1.3] max-w-sm">
+                    <p className="relative z-[2] text-xs sm:text-lg text-zinc-400 font-light leading-[1.3] max-w-sm">
                       {card.description}
                     </p>
                   </motion.div>

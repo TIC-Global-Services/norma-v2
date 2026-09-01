@@ -291,7 +291,7 @@ const NormaEcoSystem: React.FC = () => {
                           initial={{ opacity: 0, y: 8 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.2, duration: 0.4 }}
-                          className="mt-2 text-xs sm:text-base text-zinc-300/90 font-light leading-relaxed line-clamp-3"
+                          className="mt-2 text-xs sm:text-base text-white font-light leading-[1.2] line-clamp-3"
                         >
                           {card.description}
                         </motion.p>

@@ -41,7 +41,7 @@ const Hero: React.FC = () => {
               Better Connections Lead To Better Outcomes
             </p>
 
-            <p className="mt-5 sm:mt-6 text-sm sm:text-[15px] text-white font-light leading-[1.3] lg:leading-relaxed max-w-xl">
+            <p className="mt-5 sm:mt-6 text-sm sm:text-lg text-white font-light leading-[1.2] lg:leading-relaxed max-w-xl">
               Norma doesn&apos;t just assist healthcare—she connects it. Every patient,
               every conversation, every detail, remembered. One platform. Four
               specialized agents. Start with what you need today and scale as you
