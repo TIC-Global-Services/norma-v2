@@ -6,17 +6,28 @@ import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 const paragraph =
   "We started in Dubai because the UAE is the most connected, most progressive, most ambitious healthcare market in the Gulf. Because DHA and MOHAP are building the regulatory foundation for what AI-powered healthcare looks like. Because Dubai is where the future of Gulf healthcare gets decided. From Dubai we go to Saudi Arabia. Then the broader Gulf. Then the markets that need this most — Nigeria, Kenya, the Philippines, Bangladesh, Brazil. Every country where clinics run on trust and human effort instead of legacy infrastructure.";
 
+const punchline1 = "Not built for a few.";
+const punchline2 = "Built for healthcare everywhere.";
+
 interface WordProps {
   children: string;
   progress: MotionValue<number>;
   range: [number, number];
+  targetColor?: string;
+  className?: string;
 }
 
-const Word: React.FC<WordProps> = ({ children, progress, range }) => {
-  const color = useTransform(progress, range, ["#3F3F46", "#FFFFFF"]);
+const Word: React.FC<WordProps> = ({
+  children,
+  progress,
+  range,
+  targetColor = "#FFFFFF",
+  className = "",
+}) => {
+  const color = useTransform(progress, range, ["#3F3F46", targetColor]);
 
   return (
-    <span className="relative inline-block mr-[0.28em]">
+    <span className={`relative inline-block mr-[0.28em] ${className}`}>
       <motion.span style={{ color }}>{children}</motion.span>
     </span>
   );
@@ -24,12 +35,17 @@ const Word: React.FC<WordProps> = ({ children, progress, range }) => {
 
 const WhatsNext: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const words = paragraph.split(" ");
+  const paragraphWords = paragraph.split(" ");
+  const punchline1Words = punchline1.split(" ");
+  const punchline2Words = punchline2.split(" ");
 
-  // Track scroll progress of the paragraph across mobile and desktop
+  const totalWords =
+    paragraphWords.length + punchline1Words.length + punchline2Words.length;
+
+  // Track scroll progress of the entire section across mobile and desktop
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start 75%", "end 45%"],
+    offset: ["start 75%", "end 35%"],
   });
 
   return (
@@ -53,33 +69,56 @@ const WhatsNext: React.FC = () => {
         </motion.h2>
 
         {/* Scroll Reveal Editorial Paragraph */}
-        <p className="text-sm sm:text-xl md:text-[22px] lg:text-[22px] text-right font-normal leading-[1.2] md:leading-[1.4] tracking-tight">
-          {words.map((word, i) => {
-            const start = i / words.length;
-            const end = start + 1 / words.length;
+        <p className="text-sm sm:text-xl md:text-[22px] lg:text-[22px] text-right md:text-left font-normal leading-[1.2] md:leading-[1.4] tracking-tight">
+          {paragraphWords.map((word, i) => {
+            const start = i / totalWords;
+            const end = (i + 1) / totalWords;
             return (
-              <Word key={i} progress={scrollYProgress} range={[start, end]}>
+              <Word key={`para-${i}`} progress={scrollYProgress} range={[start, end]}>
                 {word}
               </Word>
             );
           })}
         </p>
 
-        {/* Final Punchline */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="mt-16 sm:mt-24 flex flex-col md:gap-1.5"
-        >
-          <p className="text-xl sm:text-2xl lg:text-[34px] font-light text-[#AAAAAA] tracking-tight">
-            Not built for a few.
+        {/* Final Punchline with Reveal Effect */}
+        <div className="mt-16 sm:mt-24 flex flex-col md:gap-1.5">
+          <p className="text-xl sm:text-2xl lg:text-[34px] font-light tracking-tight">
+            {punchline1Words.map((word, idx) => {
+              const globalIndex = paragraphWords.length + idx;
+              const start = globalIndex / totalWords;
+              const end = (globalIndex + 1) / totalWords;
+              return (
+                <Word
+                  key={`p1-${idx}`}
+                  progress={scrollYProgress}
+                  range={[start, end]}
+                >
+                  {word}
+                </Word>
+              );
+            })}
           </p>
-          <h3 className="text-3xl sm:text-5xl lg:text-[60px] font-normal tracking-tight text-[#AAAAAA] leading-tight">
-            Built for <br className="md:hidden"/> healthcare everywhere.
+          <h3 className="text-3xl sm:text-5xl lg:text-[60px] font-normal tracking-tight leading-tight">
+            {punchline2Words.map((word, idx) => {
+              const globalIndex =
+                paragraphWords.length + punchline1Words.length + idx;
+              const start = globalIndex / totalWords;
+              const end = (globalIndex + 1) / totalWords;
+              return (
+                <React.Fragment key={`p2-${idx}`}>
+                  <Word
+                    progress={scrollYProgress}
+                    range={[start, end]}
+                  >
+                    {word}
+                  </Word>
+                  {idx === 1 && <br className="md:hidden" />}
+                </React.Fragment>
+              );
+            })}
           </h3>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

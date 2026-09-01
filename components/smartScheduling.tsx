@@ -168,9 +168,45 @@ const NormaEcoSystem: React.FC = () => {
                 type="button"
                 onClick={goToNext}
                 aria-label="Next card"
-                className="w-12 h-12 rounded-full bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/80 hover:border-purple-400/50 flex items-center justify-center text-zinc-300 hover:text-white transition-all duration-200 active:scale-95 shadow-lg cursor-pointer"
+                className="relative w-12 h-12 rounded-full bg-zinc-900/90 hover:bg-zinc-800 flex items-center justify-center text-zinc-300 hover:text-white transition-all duration-200 active:scale-95 shadow-lg cursor-pointer group"
               >
-                <ChevronRight className="w-5 h-5" />
+                {/* Circular Auto-Slide Progress Stroke */}
+                <svg
+                  className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none"
+                  viewBox="0 0 48 48"
+                >
+                  {/* Background Track */}
+                  <circle
+                    cx="24"
+                    cy="24"
+                    r="21"
+                    className="stroke-zinc-700/80"
+                    strokeWidth="2"
+                    fill="none"
+                  />
+                  {/* Animated Progress Indicator */}
+                  {!userInteracted && (
+                    <motion.circle
+                      key={currentIndex}
+                      cx="24"
+                      cy="24"
+                      r="21"
+                      stroke="#d8b4fe"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      fill="none"
+                      strokeDasharray={2 * Math.PI * 21}
+                      initial={{ strokeDashoffset: 2 * Math.PI * 21 }}
+                      animate={{ strokeDashoffset: 0 }}
+                      transition={{
+                        duration: 4.5,
+                        ease: "linear",
+                      }}
+                    />
+                  )}
+                </svg>
+
+                <ChevronRight className="w-5 h-5 relative z-10" />
               </button>
 
               {/* Progress dots indicator */}

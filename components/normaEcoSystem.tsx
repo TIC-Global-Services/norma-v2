@@ -215,11 +215,19 @@ const NormaEcoSystem: React.FC = () => {
                   <AnimatePresence mode="wait">
                     {isActive ? (
                       <motion.div
-                        key="video"
+                        key={`video-${index}`}
                         initial={{ opacity: 0, scale: 0.85 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.85 }}
-                        transition={{ duration: 0.80, ease: "easeOut" }}
+                        exit={{
+                          opacity: 0,
+                          scale: 0.85,
+                          transition: { duration: 0.15 },
+                        }}
+                        transition={{
+                          duration: 0.5,
+                          delay: 0.35,
+                          ease: "easeOut",
+                        }}
                         className="relative w-36 h-36 sm:w-40 sm:h-40 flex items-center justify-center"
                       >
                         <Image

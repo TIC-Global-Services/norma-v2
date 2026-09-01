@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import TextType from "./textType";
 
 const InstagramIcon: React.FC<{ className?: string }> = ({ className = "w-4 h-4" }) => (
   <svg
@@ -78,7 +79,7 @@ const Footer: React.FC = () => {
 
       <div className="w-full mx-auto flex flex-col justify-between md:min-h-[540px]">
         {/* Navigation Links Row */}
-        <div className="flex flex-wrap items-end lg:items-center justify-center lg:ustify-between gap-6 pt-4 md:pb-8">
+        <div className="flex flex-wrap items-end lg:items-center justify-center lg:justify-between gap-6 pt-4 md:pb-8">
           {/* Left Product Links */}
           <nav className="flex flex-wrap items-center gap-6 sm:gap-8 md:gap-10">
             {leftLinks.map((link) => (
@@ -120,15 +121,27 @@ const Footer: React.FC = () => {
             Got a question?
           </motion.p>
 
-          <motion.h1
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-            className="text-7xl sm:text-9xl md:text-[160px] lg:text-[200px] xl:text-[200px] font-normal tracking-tight leading-none select-none text-transparent bg-clip-text bg-gradient-to-b from-[#E2D8F2] via-[#6D6284] to-transparent [mask-image:linear-gradient(to_bottom,white_40%,rgba(255,255,255,0.05)_90%)] transition-all duration-300"
+            className="flex items-center justify-center"
           >
-            Ask Norma
-          </motion.h1>
+            <TextType
+              as="h1"
+              text="Ask Norma"
+              typingSpeed={120}
+              pauseDuration={3000}
+              deletingSpeed={70}
+              loop={false}
+              startOnVisible={true}
+              showCursor={true}
+              cursorCharacter="|"
+              cursorClassName="text-[#D3C5F6] [background-clip:unset] [color:#D3C5F6]"
+              className="text-7xl sm:text-9xl md:text-[160px] lg:text-[200px] xl:text-[200px] font-normal tracking-tight leading-none select-none text-transparent bg-clip-text bg-gradient-to-b from-[#E2D8F2] via-[#6D6284] to-transparent [mask-image:linear-gradient(to_bottom,white_40%,rgba(255,255,255,0.05)_90%)] transition-all duration-300"
+            />
+          </motion.div>
           <div className="flex flex-wrap  md:hidden text-sm items-center justify-start gap-2 mt-5 sm:gap-8 order-1 lg:order-2">
             <a
               href="mailto:Support@normaai.one"

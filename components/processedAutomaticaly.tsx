@@ -158,10 +158,10 @@ const ProcessedAutomatically: React.FC = () => {
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center z-10">
-                    <span className="text-xs sm:text-xl text-white font-light tracking-tight leading-none transition-colors group-hover:text-zinc-200">
+                    <span className="text-xs sm:text-xl text-white font-light tracking-tight leading-none transition-colors group-hover:text-[#D3C5F6]">
                       {item.category}
                     </span>
-                    <span className="text-xl sm:text-2xl leading-none lg:text-[40px] font-normal tracking-tight text-white transition-transform duration-300 group-hover:scale-[1.03]">
+                    <span className="text-xl sm:text-2xl leading-none lg:text-[40px] font-normal tracking-tight text-white transition-transform duration-300 group-hover:text-[#D3C5F6] group-hover:scale-[1.03]">
                       {item.title}
                     </span>
                   </div>
