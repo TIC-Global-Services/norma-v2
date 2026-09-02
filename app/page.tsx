@@ -9,11 +9,12 @@ import GulfClinic from "@/components/gulfClinic";
 import WhoBuiltIt from "@/components/whoBuildit";
 import WhatsNext from "@/components/whatsNext";
 import Footer from "@/reuseable/Footer";
+import GrassScene from "@/components/grass/GrassScene";
 
 export default function Home() {
   return (
-    <main className="min-h-screen w-full bg-black">
-      <Hero />
+    <main className="min-h-screen w-full">
+      <GrassScene />
       <Oneplatform />
       <NormaEcoSystem />
       <SmartScheduling />
