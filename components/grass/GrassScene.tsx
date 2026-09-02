@@ -9,6 +9,19 @@ import { playerConfig } from "./playerConfig";
 export default function GrassScene() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [error, setError] = useState<string | null>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const progress = Math.min(1, Math.max(0, scrollY / playerConfig.SCROLL_INTRO_THRESHOLD_PX));
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -78,26 +91,53 @@ export default function GrassScene() {
         <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-end">
           <div className="w-full px-6 md:px-[3%] pt-32 pb-12 sm:pb-16 md:pb-20">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 lg:gap-12">
-              {/* Left Column: Headline, Tagline, & Description */}
-              <div className="max-w-2xl">
-                <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-normal text-center md:text-left tracking-tight text-white leading-none lg:leading-[1.12]">
-                  Superconnected <br />
-                  <span className="text-white">Workflow With </span>
-                  <span className="text-[#c4b5fd] font-medium drop-shadow-[0_0_25px_rgba(196,181,253,0.35)]">
-                    Norma
-                  </span>
-                </h1>
+              {/* Left Column: Crossfading Headline, Tagline, & Description */}
+              <div className="relative max-w-4xl min-h-[220px] md:min-h-[250px] flex items-end">
+                {/* Phase 1 (Initial: 0% to ~45% scroll) */}
+                <div
+                  className={`transition-all duration-700 ease-out ${
+                    scrollProgress < 0.45
+                      ? "opacity-100 translate-y-0 pointer-events-auto"
+                      : "opacity-0 -translate-y-6 pointer-events-none absolute inset-0"
+                  }`}
+                >
+                  <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-normal text-center md:text-left tracking-tight text-white leading-none lg:leading-[1.12]">
+                    Superconnected <br />
+                    <span className="text-white">Workflow With </span>
+                    <span className="text-[#c4b5fd] font-medium drop-shadow-[0_0_25px_rgba(196,181,253,0.35)]">
+                      Norma
+                    </span>
+                  </h1>
 
-                <p className="mt-4 sm:mt-5 text-xl sm:text-xl font-normal text-center md:text-left text-zinc-100 tracking-tight leading-[1.2] md:leading-none">
-                  Better Connections <br className="md:hidden" /> Lead To Better Outcomes
-                </p>
+                  <p className="mt-4 sm:mt-5 text-xl sm:text-xl font-normal text-center md:text-left text-zinc-100 tracking-tight leading-[1.2] md:leading-none">
+                    Better Connections <br className="md:hidden" /> Lead To Better Outcomes
+                  </p>
 
-                <p className="mt-5 sm:mt-6 text-base sm:text-lg text-white font-light leading-[1.2] lg:leading-relaxed md:max-w-xl text-center md:text-left">
-                  Norma doesn&apos;t just assist healthcare—she connects it. Every patient,
-                  every conversation, every detail, remembered. One platform. Four
-                  specialized agents. Start with what you need today and scale as you
-                  grow.
-                </p>
+                  <p className="mt-5 sm:mt-6 text-base sm:text-lg text-white font-light leading-[1.2] lg:leading-relaxed md:max-w-xl text-center md:text-left">
+                    Norma doesn&apos;t just assist healthcare—she connects it. Every patient,
+                    every conversation, every detail, remembered. One platform. Four
+                    specialized agents. Start with what you need today and scale as you
+                    grow.
+                  </p>
+                </div>
+
+                {/* Phase 2 (Mid to End: >= 45% scroll) */}
+                <div
+                  className={`transition-all duration-700 ease-out ${
+                    scrollProgress >= 0.45
+                      ? "opacity-100 translate-y-0 pointer-events-auto"
+                      : "opacity-0 translate-y-6 pointer-events-none absolute inset-0"
+                  }`}
+                >
+                  <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-normal text-center md:text-left tracking-tight text-white leading-none lg:leading-[1.12]">
+                    One Intelligent Layer
+                  </h1>
+                  <span className="text-white text-4xl sm:text-5xl lg:text-[62px] font-normal text-center md:text-left tracking-tight text-white leading-none lg:leading-[1.12]">Every Healthcare Connection.</span>
+
+                  <p className="mt-5 sm:mt-6 text-base sm:text-lg text-zinc-200 font-light leading-[1.2]  md:max-w-xl text-center md:text-left">
+                    From the first patient conversation to the final follow-up, NORMA brings communication, automation, and healthcare systems together in one seamless ecosystem.
+                  </p>
+                </div>
               </div>
 
               {/* Right Column: CTA Button */}

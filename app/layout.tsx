@@ -4,6 +4,7 @@ import "./globals.css";
 import NavBar from "@/reuseable/navBar";
 import SmoothScroller from "@/reuseable/SmoothScroller";
 import Footer from "@/reuseable/Footer";
+import Loader from "@/reuseable/loader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,9 +32,10 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col relative bg-black text-white">
+        <Loader />
         <SmoothScroller>
-        <NavBar className="absolute top-0 left-0 right-0" />
-        {children}
+          <NavBar className="absolute top-0 left-0 right-0" />
+          {children}
         </SmoothScroller>
         <Footer />
       </body>
