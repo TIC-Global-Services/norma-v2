@@ -1,20 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { aeonik } from "@/fonts/fonts";
 import "./globals.css";
 import NavBar from "@/reuseable/navBar";
 import SmoothScroller from "@/reuseable/SmoothScroller";
 import Footer from "@/reuseable/Footer";
 import Loader from "@/reuseable/loader";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -29,9 +19,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${aeonik.variable} ${aeonik.className} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col relative bg-black text-white">
+      <body className="min-h-full flex flex-col relative bg-black text-white font-sans">
         <Loader />
         <SmoothScroller>
           <NavBar className="absolute top-0 left-0 right-0" />

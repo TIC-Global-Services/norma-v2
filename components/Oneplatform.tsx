@@ -2,7 +2,7 @@ import React from 'react'
 
 const Oneplatform = () => {
     return (
-        <div className='px-[3%] flex lg:flex-row flex-col justify-between gap-10 text-white border-b border-[#4B4B4B] py-20'>
+        <div className='px-[3%] flex lg:flex-row flex-col justify-between gap-10 text-white border-b border-[#4B4B4B] py-20 bg-black'>
             <div className='flex flex-col gap-1'>
                 <h1 className='lg:text-[34px] text-3xl leading-none'>One Platform.</h1>
                 <h1 className='lg:text-6xl text-3xl  leading-none'>Every Interaction</h1>

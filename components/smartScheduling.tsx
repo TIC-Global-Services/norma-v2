@@ -239,7 +239,7 @@ const NormaEcoSystem: React.FC = () => {
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          <div className="relative w-full h-full aspect-[3/4] max-w-xl">
+          <div className="relative w-full h-full aspect-[3/4] md:max-h-[90dvh] max-w-xl">
             <AnimatePresence mode="popLayout">
               {visibleCards.map((card) => {
                 const stackPos = card.stackPosition;
@@ -249,8 +249,8 @@ const NormaEcoSystem: React.FC = () => {
                 const xOffset = isMobile
                   ? stackPos * 14
                   : isTablet
-                  ? stackPos * 22
-                  : stackPos * 40;
+                    ? stackPos * 22
+                    : stackPos * 40;
 
                 const yOffset = stackPos * (isMobile ? 3 : 5);
                 const scale = 1 - stackPos * 0.045;
