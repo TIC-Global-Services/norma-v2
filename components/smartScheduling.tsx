@@ -134,7 +134,7 @@ const NormaEcoSystem: React.FC = () => {
 
   return (
     <section className="w-full bg-black text-white px-6 md:px-[3%] py-16 md:py-24 lg:py-28 overflow-hidden border-b border-[#262626]">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-1 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-1 items-center">
         {/* Left Column: Heading, Description & Navigation Buttons */}
         <div className="lg:col-span-5 flex flex-col justify-center">
           <motion.div
@@ -210,7 +210,7 @@ const NormaEcoSystem: React.FC = () => {
               </button>
 
               {/* Progress dots indicator */}
-              {/* <div className="flex items-center gap-1.5 ml-2">
+              <div className="flex md:hidden items-center gap-1.5 ml-2">
                 {ecoCards.map((_, idx) => (
                   <button
                     key={idx}
@@ -227,7 +227,7 @@ const NormaEcoSystem: React.FC = () => {
                     }`}
                   />
                 ))}
-              </div> */}
+              </div>
             </div>
           </motion.div>
         </div>
@@ -339,6 +339,24 @@ const NormaEcoSystem: React.FC = () => {
             </AnimatePresence>
           </div>
         </div>
+        <div className="flex md:hidden justify-center items-center gap-1.5 ml-2">
+                {ecoCards.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      setCurrentIndex(idx);
+                      setUserInteracted(true);
+                    }}
+                    aria-label={`Go to slide ${idx + 1}`}
+                    className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                      currentIndex === idx
+                        ? "w-10 bg-purple-400"
+                        : "w-3 bg-zinc-700 hover:bg-zinc-500"
+                    }`}
+                  />
+                ))}
+              </div>
       </div>
     </section>
   );

@@ -42,82 +42,93 @@ const WhatsNext: React.FC = () => {
   const totalWords =
     paragraphWords.length + punchline1Words.length + punchline2Words.length;
 
-  // Track scroll progress of the entire section across mobile and desktop
+  // Track scroll progress of the pinned section
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start 75%", "end 35%"],
+    offset: ["start start", "end end"],
   });
+
+  const START_OFFSET = 0.05;
+  const END_OFFSET = 0.85;
+
+  const getWordRange = (index: number): [number, number] => {
+    const step = (END_OFFSET - START_OFFSET) / totalWords;
+    const start = START_OFFSET + index * step;
+    const end = start + step * 1.4;
+    return [start, Math.min(1, end)];
+  };
 
   return (
     <section
       ref={containerRef}
-      className="relative w-full py-24 md:py-36 px-6 md:px-[5%] lg:px-[3%] bg-black text-white selection:bg-purple-500/30 overflow-hidden"
+      className="relative w-full h-[250vh] bg-black text-white selection:bg-purple-500/30"
     >
-      {/* Ambient purple backlight */}
-      <div className="absolute top-1/3 left-1/4 w-[500px] h-[300px] bg-purple-900/10 blur-[130px] rounded-full pointer-events-none -z-10" />
+      {/* Pinned Sticky Viewport */}
+      <div className="sticky top-0 h-screen h-[100dvh] w-full flex flex-col justify-center px-6 md:px-[5%] lg:px-[3%] overflow-hidden">
+        {/* Ambient purple backlight */}
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[300px] bg-purple-900/10 blur-[130px] rounded-full pointer-events-none -z-10" />
 
-      <div className="max-w-6xl mx-auto flex flex-col">
-        {/* Title */}
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-3xl sm:text-5xl lg:text-[50px] font-normal tracking-tight text-[#D3C5F6] mb-10 sm:mb-12"
-        >
-          Building What&apos;s Next
-        </motion.h2>
+        <div className="max-w-6xl mx-auto w-full flex flex-col">
+          {/* Title */}
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-3xl sm:text-5xl lg:text-[50px] font-normal tracking-tight text-[#D3C5F6] mb-8 sm:mb-12"
+          >
+            Building What&apos;s Next
+          </motion.h2>
 
-        {/* Scroll Reveal Editorial Paragraph */}
-        <p className="text-sm sm:text-xl md:text-[22px] lg:text-[22px] text-right md:text-left font-normal leading-[1.2] md:leading-[1.4] tracking-tight">
-          {paragraphWords.map((word, i) => {
-            const start = i / totalWords;
-            const end = (i + 1) / totalWords;
-            return (
-              <Word key={`para-${i}`} progress={scrollYProgress} range={[start, end]}>
-                {word}
-              </Word>
-            );
-          })}
-        </p>
-
-        {/* Final Punchline with Reveal Effect */}
-        <div className="mt-16 sm:mt-24 flex flex-col md:gap-1.5">
-          <p className="text-xl sm:text-2xl lg:text-[34px] font-light tracking-tight">
-            {punchline1Words.map((word, idx) => {
-              const globalIndex = paragraphWords.length + idx;
-              const start = globalIndex / totalWords;
-              const end = (globalIndex + 1) / totalWords;
+          {/* Scroll Reveal Editorial Paragraph */}
+          <p className="text-sm sm:text-xl md:text-[22px] lg:text-[22px] text-right md:text-left font-normal leading-[1.2] md:leading-[1.4] tracking-tight">
+            {paragraphWords.map((word, i) => {
               return (
                 <Word
-                  key={`p1-${idx}`}
+                  key={`para-${i}`}
                   progress={scrollYProgress}
-                  range={[start, end]}
+                  range={getWordRange(i)}
                 >
                   {word}
                 </Word>
               );
             })}
           </p>
-          <h3 className="text-3xl sm:text-5xl lg:text-[60px] font-normal tracking-tight leading-tight">
-            {punchline2Words.map((word, idx) => {
-              const globalIndex =
-                paragraphWords.length + punchline1Words.length + idx;
-              const start = globalIndex / totalWords;
-              const end = (globalIndex + 1) / totalWords;
-              return (
-                <React.Fragment key={`p2-${idx}`}>
+
+          {/* Final Punchline with Reveal Effect */}
+          <div className="mt-10 sm:mt-16 md:mt-20 flex flex-col md:gap-1.5">
+            <p className="text-xl sm:text-2xl lg:text-[34px] font-light tracking-tight">
+              {punchline1Words.map((word, idx) => {
+                const globalIndex = paragraphWords.length + idx;
+                return (
                   <Word
+                    key={`p1-${idx}`}
                     progress={scrollYProgress}
-                    range={[start, end]}
+                    range={getWordRange(globalIndex)}
                   >
                     {word}
                   </Word>
-                  {idx === 1 && <br className="md:hidden" />}
-                </React.Fragment>
-              );
-            })}
-          </h3>
+                );
+              })}
+            </p>
+            <h3 className="text-3xl sm:text-5xl lg:text-[60px] font-normal tracking-tight leading-tight">
+              {punchline2Words.map((word, idx) => {
+                const globalIndex =
+                  paragraphWords.length + punchline1Words.length + idx;
+                return (
+                  <React.Fragment key={`p2-${idx}`}>
+                    <Word
+                      progress={scrollYProgress}
+                      range={getWordRange(globalIndex)}
+                    >
+                      {word}
+                    </Word>
+                    {idx === 1 && <br className="md:hidden" />}
+                  </React.Fragment>
+                );
+              })}
+            </h3>
+          </div>
         </div>
       </div>
     </section>
