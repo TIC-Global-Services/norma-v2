@@ -1,6 +1,33 @@
 import * as THREE from "three/webgpu";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { playerConfig } from "./playerConfig";
+import { INDIRECT_FIRST_INSTANCE_FEATURE } from "./Grass";
+
+// GLB source textures ship at 4096x4096 — decoded to GPU memory that's
+// 4096*4096*4 = 64MB for a SINGLE map, way more than a ~6-unit-tall on-screen
+// character needs and a very plausible trigger for "WebGL Device Lost" on
+// real mobile GPUs (confirmed happening on an actual phone, not just a
+// simulated/headless one). Downscale before upload; go tighter still on the
+// WebGL2 fallback backend where memory budgets are smaller.
+const MAX_TEXTURE_SIZE = 2048;
+const MAX_TEXTURE_SIZE_LOW_POWER = 1024;
+
+function downscaleTexture(texture: THREE.Texture, maxSize: number) {
+  const image = texture.image as { width?: number; height?: number } | undefined;
+  if (!image?.width || !image?.height) return;
+  if (image.width <= maxSize && image.height <= maxSize) return;
+
+  const scale = maxSize / Math.max(image.width, image.height);
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(image.width * scale);
+  canvas.height = Math.round(image.height * scale);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  ctx.drawImage(image as CanvasImageSource, 0, 0, canvas.width, canvas.height);
+  texture.image = canvas;
+  texture.needsUpdate = true;
+}
 
 type PlayerModel = {
   url: string;
@@ -16,10 +43,11 @@ type PlayerModel = {
 const PLAYER_MODELS = {
   charcter: { url: "/charcter.glb", walkClip: 12, needsYFlip: false },
   walkingMen: { url: "/walking_men.glb", walkClip: "Take 001", needsYFlip: true },
+  blackShirt: { url: "/chracter_black_shirt.glb", walkClip: 3, needsYFlip: true },
 } satisfies Record<string, PlayerModel>;
 
 // swap the character model by changing this one line
-const ACTIVE_MODEL: keyof typeof PLAYER_MODELS = "walkingMen";
+const ACTIVE_MODEL: keyof typeof PLAYER_MODELS = "blackShirt";
 
 const TARGET_HEIGHT_METERS = 1.8; // one-time load-time normalization baseline; live "size" is root.scale (see debugPanel.ts)
 
@@ -47,8 +75,20 @@ export class Player {
 
     // default texture anisotropy is 1 (none) — every map goes muddy/blurry
     // the moment the surface isn't dead-on to the camera, which reads as
-    // "bad texture quality" even though the source texture is fine
-    const maxAnisotropy = renderer.getMaxAnisotropy();
+    // "bad texture quality" even though the source texture is fine.
+    // getMaxAnisotropy() can throw on the WebGL2 fallback backend (three.js
+    // reads a property off a null WebGL extension object when it's
+    // unavailable, or after a mobile GPU context loss from loading several
+    // big GLB textures at once) — never let a purely cosmetic feature take
+    // the whole scene down with it.
+    let maxAnisotropy = 1;
+    try {
+      maxAnisotropy = renderer.getMaxAnisotropy();
+    } catch (err) {
+      console.warn("[Player] getMaxAnisotropy failed, skipping anisotropic filtering:", err);
+    }
+    const isLowPowerBackend = !renderer.hasFeature(INDIRECT_FIRST_INSTANCE_FEATURE);
+    const maxTextureSize = isLowPowerBackend ? MAX_TEXTURE_SIZE_LOW_POWER : MAX_TEXTURE_SIZE;
     model.traverse((child) => {
       const mesh = child as THREE.Mesh;
       if (!mesh.isMesh) return;
@@ -56,7 +96,9 @@ export class Player {
       for (const material of materials) {
         for (const key of ["map", "normalMap", "roughnessMap", "metalnessMap", "aoMap", "emissiveMap"] as const) {
           const texture = (material as THREE.MeshStandardMaterial)[key];
-          if (texture) texture.anisotropy = maxAnisotropy;
+          if (!texture) continue;
+          downscaleTexture(texture, maxTextureSize);
+          texture.anisotropy = maxAnisotropy;
         }
       }
     });
