@@ -36,7 +36,19 @@ const NormaEcoSystem: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [slideDirection, setSlideDirection] = useState<"left" | "right">("right");
   const [userInteracted, setUserInteracted] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [selectedDesktopIndex, setSelectedDesktopIndex] = useState<number>(0);
   const interactionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const activeDesktopIndex = hoveredIndex !== null ? hoveredIndex : selectedDesktopIndex;
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const pauseAutoScroll = useCallback(() => {
     setUserInteracted(true);
@@ -58,16 +70,16 @@ const NormaEcoSystem: React.FC = () => {
     pauseAutoScroll();
   }, [pauseAutoScroll]);
 
-  // Auto-advance slides periodically on mobile
+  // Auto-advance slides periodically on mobile only
   useEffect(() => {
-    if (userInteracted) return;
+    if (!isMobile || userInteracted) return;
     const interval = setInterval(() => {
       setSlideDirection("right");
       setActiveIndex((prev) => (prev + 1) % ecosystemCards.length);
     }, 3800);
 
     return () => clearInterval(interval);
-  }, [userInteracted]);
+  }, [isMobile, userInteracted]);
 
   return (
     <section className="relative w-full py-24 md:py-32 px-4 sm:px-6 lg:px-[3%] bg-black text-white selection:bg-purple-500/30 overflow-hidden">
@@ -177,21 +189,30 @@ const NormaEcoSystem: React.FC = () => {
         {/* ========================================================================= */}
         {/* DESKTOP & TABLET GRID (sm and above) */}
         {/* ========================================================================= */}
-        <div className="hidden sm:grid w-full grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-4">
+        <div
+          onMouseLeave={() => setHoveredIndex(null)}
+          className="hidden sm:grid w-full grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-4"
+        >
           {ecosystemCards.map((card, index) => {
-            const isActive = activeIndex === index;
+            const isActive = activeDesktopIndex === index;
 
             return (
               <div
                 key={card.id}
                 role="button"
                 tabIndex={0}
-                onMouseEnter={() => setActiveIndex(index)}
-                onClick={() => setActiveIndex(index)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") setActiveIndex(index);
+                onMouseEnter={() => setHoveredIndex(index)}
+                onClick={() => {
+                  setSelectedDesktopIndex(index);
+                  setHoveredIndex(index);
                 }}
-                className={`group relative rounded-2xl md:rounded-[22px] min-h-[380px] sm:min-h-[65dvh] p-6 sm:p-8 flex flex-col justify-between cursor-pointer overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] focus-visible:outline-none select-none ${
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    setSelectedDesktopIndex(index);
+                    setHoveredIndex(index);
+                  }
+                }}
+                className={`group relative rounded-2xl md:rounded-[22px] min-h-[380px] sm:min-h-[65dvh] p-6 sm:p-8 flex flex-col justify-between cursor-pointer overflow-hidden transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] focus-visible:outline-none select-none ${
                   isActive
                     ? "bg-white text-black shadow-[0_20px_60px_rgba(255,255,255,0.12)] scale-[1.01]"
                     : "bg-[#383838] hover:bg-[#404040] text-white"
@@ -203,7 +224,7 @@ const NormaEcoSystem: React.FC = () => {
                     <motion.div
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.25 }}
+                      transition={{ duration: 0.25, delay: 0.1 }}
                     >
                       <ArrowUpRight className="w-6 h-6 text-black stroke-[2]" />
                     </motion.div>
@@ -221,10 +242,10 @@ const NormaEcoSystem: React.FC = () => {
                         exit={{
                           opacity: 0,
                           scale: 0.85,
-                          transition: { duration: 0.15 },
+                          transition: { duration: 0.12 },
                         }}
                         transition={{
-                          duration: 0.5,
+                          duration: 0.35,
                           delay: 0.35,
                           ease: "easeOut",
                         }}

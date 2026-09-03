@@ -2,19 +2,21 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three/webgpu";
+import { motion } from "framer-motion";
 import { createGrassScene, type GrassSceneHandle } from "./createGrassScene";
 import { playerConfig } from "./playerConfig";
 
 export default function GrassScene() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [error, setError] = useState<string | null>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isPhase2, setIsPhase2] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      const progress = Math.min(1, Math.max(0, scrollY / playerConfig.SCROLL_INTRO_THRESHOLD_PX));
-      setScrollProgress(progress);
+      const progress = scrollY / playerConfig.SCROLL_INTRO_THRESHOLD_PX;
+      const shouldBePhase2 = progress >= 0.45;
+      setIsPhase2((prev) => (prev !== shouldBePhase2 ? shouldBePhase2 : prev));
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -119,13 +121,21 @@ export default function GrassScene() {
           <div className="w-full px-6 md:px-[3%] pt-32 pb-12 sm:pb-16 md:pb-20">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 lg:gap-12">
               {/* Left Column: Crossfading Headline, Tagline, & Description */}
-              <div className="relative max-w-4xl min-h-[220px] md:min-h-[250px] flex items-end">
+              <div className="relative max-w-4xl min-h-[220px] md:min-h-[250px] grid grid-cols-1 grid-rows-1 items-end">
                 {/* Phase 1 (Initial: 0% to ~45% scroll) */}
-                <div
-                  className={`transition-all duration-700 ease-out ${
-                    scrollProgress < 0.45
-                      ? "opacity-100 translate-y-0 pointer-events-auto"
-                      : "opacity-0 -translate-y-6 pointer-events-none absolute inset-0"
+                <motion.div
+                  initial={false}
+                  animate={{
+                    opacity: isPhase2 ? 0 : 1,
+                    y: isPhase2 ? -20 : 0,
+                    filter: isPhase2 ? "blur(6px)" : "blur(0px)",
+                  }}
+                  transition={{
+                    duration: 0.7,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  className={`col-start-1 row-start-1 flex flex-col justify-end w-full ${
+                    !isPhase2 ? "pointer-events-auto" : "pointer-events-none"
                   }`}
                 >
                   <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-normal text-center md:text-left tracking-tight text-white leading-none lg:leading-[1.12]">
@@ -146,25 +156,32 @@ export default function GrassScene() {
                     specialized agents. Start with what you need today and scale as you
                     grow.
                   </p>
-                </div>
+                </motion.div>
 
                 {/* Phase 2 (Mid to End: >= 45% scroll) */}
-                <div
-                  className={`transition-all duration-700 ease-out ${
-                    scrollProgress >= 0.45
-                      ? "opacity-100 translate-y-0 pointer-events-auto"
-                      : "opacity-0 translate-y-6 pointer-events-none absolute inset-0"
+                <motion.div
+                  initial={false}
+                  animate={{
+                    opacity: isPhase2 ? 1 : 0,
+                    y: isPhase2 ? 0 : 20,
+                    filter: isPhase2 ? "blur(0px)" : "blur(6px)",
+                  }}
+                  transition={{
+                    duration: 0.7,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  className={`col-start-1 row-start-1 flex flex-col justify-end w-full ${
+                    isPhase2 ? "pointer-events-auto" : "pointer-events-none"
                   }`}
                 >
                   <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-normal text-center md:text-left tracking-tight text-white leading-none lg:leading-[1.12]">
                     One Intelligent Layer <br /> Every Healthcare Connection
                   </h1>
-                  {/* <span className="text-white text-4xl sm:text-5xl lg:text-[62px] font-normal text-center md:text-left tracking-tight text-white leading-none lg:leading-[1.12]"></span> */}
 
-                  <p className="mt-5 sm:mt-6 text-base sm:text-lg text-zinc-200 font-light leading-[1.2]  md:max-w-xl text-center md:text-left">
+                  <p className="mt-5 sm:mt-6 text-base sm:text-lg text-zinc-200 font-light leading-[1.2] md:max-w-xl text-center md:text-left">
                     From the first patient conversation to the final follow-up, NORMA brings communication, automation, and healthcare systems together in one seamless ecosystem.
                   </p>
-                </div>
+                </motion.div>
               </div>
 
               {/* Right Column: CTA Button */}
